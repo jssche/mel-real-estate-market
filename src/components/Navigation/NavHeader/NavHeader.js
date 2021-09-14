@@ -31,14 +31,14 @@ const NavHeader = () => {
     return (
         <NavHeaderDiv>
             <h1>Melbourne Real Estate Market Map</h1>
-            <SideBarToggleWrapper>
+            {/* <SideBarToggleWrapper>
                 {sideBarShown ? (
                     <SidebarCross toggleSideBar={toggleSideBar}>X</SidebarCross>
                 ) : (
                     <SidebarHamberger toggleSideBar={toggleSideBar} />
                 )}
             </SideBarToggleWrapper>
-            {sideBarShown ? <Sidebar /> : null}
+            {sideBarShown ? <Sidebar /> : null} */}
         </NavHeaderDiv>
     );
 };
