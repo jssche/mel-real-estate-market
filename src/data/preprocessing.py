@@ -18,87 +18,169 @@ def exportGeoData(geofile_dir, city):
     writeData(district, 'polygons')
 
 
-def exportPropertyData(property_type, cols, new_cols, top_root):
-    all_data = []
+def exportPropertyData(cols, new_cols):
+    property_types = ['house', 'unit']
+    dirs = {'house' : '../../../AURIN_data/property/house', 'unit' : '../../../AURIN_data/property/unit'}
+    # with open('./ProcessedData/mel_polygons.geojson', 'r') as f:
+    #     polygons = json.load(f)
 
-    # filter raw data
-    for root, _, files in os.walk(top_root):
-        for file in files:
-            if file.endswith('.json') and file.startswith('data'):
-                file_path = root + '/' + file
-                with open(file_path) as f:
-                    raw_data = json.load(f)
-                    all_data.append(prepare_data(raw_data, cols, new_cols)) 
-    
-    # initiate dictionaries
-    for_sale_median_timeline = {}
-    sold_median_timeline = {}
-    for_sale_count_timeline = {}
-    sold_count_timeline = {}
-    overview = {
-        2019: {
-            'for_sale_median': {},
-            'sold_median': {},
-            'for_sale_count': {},
-            'sold_count': {},
+    coloring_stops = {
+        'house' : {
+            2019: {
+                'for_sale_median': None,
+                'sold_median': None,
+                'for_sale_count': None,
+                'sold_count': None,
+            },
+            2020: {
+                'for_sale_median': None,
+                'sold_median': None,
+                'for_sale_count': None,
+                'sold_count': None,
+            },
+            'allYears': {
+                'for_sale_median': None,
+                'sold_median': None,
+                'for_sale_count': None,
+                'sold_count': None,
+            }
         },
-        2020: {
-            'for_sale_median': {},
-            'sold_median': {},
-            'for_sale_count': {},
-            'sold_count': {},
-        },
-        'allYears': {
-            'for_sale_median': {},
-            'sold_median': {},
-            'for_sale_count': {},
-            'sold_count': {},
+        'unit' : {
+            2019: {
+                'for_sale_median': None,
+                'sold_median': None,
+                'for_sale_count': None,
+                'sold_count': None,
+            },
+            2020: {
+                'for_sale_median': None,
+                'sold_median': None,
+                'for_sale_count': None,
+                'sold_count': None,
+            },
+            'allYears': {
+                'for_sale_median': None,
+                'sold_median': None,
+                'for_sale_count': None,
+                'sold_count': None,
+            }
         }
     }
-    # sacount = 0
-    for suburb in all_data[0]:
-        # sacount += 1
-        for_sale_median_timeline[suburb['sa3code']] = [0]*24
-        sold_median_timeline[suburb['sa3code']] = [0]*24
-        for_sale_count_timeline[suburb['sa3code']] = [0]*24
-        sold_count_timeline[suburb['sa3code']] = [0]*24
-    # print(sacount)
-    # print(for_sale_median_timeline)
 
-    # construct median price timeline and count timeline
-    for month_data in all_data:
-        for suburb_data in month_data:
-            year = suburb_data['year']
-            month = suburb_data['month']
-            index = (year - 2019) * 12 + (month - 1)
-            # if suburb_data['for_sale_median_price'] == 0 or suburb_data['sold_median_price'] == 0 or suburb_data['for_sale_count'] == 0 or suburb_data['sold_count'] == 0:
-            #     print('bad data')
-            for_sale_median_timeline[suburb_data['sa3code']][index] = suburb_data['for_sale_median_price']
-            sold_median_timeline[suburb_data['sa3code']][index] = suburb_data['sold_median_price']
-            for_sale_count_timeline[suburb_data['sa3code']][index] = suburb_data['for_sale_count']
-            sold_count_timeline[suburb_data['sa3code']][index] = suburb_data['sold_count']
-    # print(for_sale_count_timeline)
+    for ptype in property_types:
 
-    # construct overview all
-    for key in for_sale_median_timeline:
-        overview['allYears']['for_sale_median'][key] = round(sum(for_sale_median_timeline[key]) / len(for_sale_median_timeline[key]), 2)
-        overview['allYears']['sold_median'][key] = round(sum(sold_median_timeline[key]) / len(sold_median_timeline[key]), 2)
-        overview['allYears']['for_sale_count'][key] = round(sum(for_sale_count_timeline[key]) / len(for_sale_count_timeline[key]), 2)
-        overview['allYears']['sold_count'][key] = round(sum(sold_count_timeline[key]) / len(sold_count_timeline[key]), 2)
-        overview[2019]['for_sale_median'][key] = round(sum(for_sale_median_timeline[key][:12]) / 12, 2)
-        overview[2019]['sold_median'][key] = round(sum(sold_median_timeline[key][:12]) / 12, 2)
-        overview[2019]['for_sale_count'][key] = round(sum(for_sale_count_timeline[key][:12]) / 12, 2)
-        overview[2019]['sold_count'][key] = round(sum(sold_count_timeline[key][:12]) /12, 2)
-        overview[2020]['for_sale_median'][key] = round(sum(for_sale_median_timeline[key][12:]) / 12, 2)
-        overview[2020]['sold_median'][key] = round(sum(sold_median_timeline[key][12:]) / 12, 2)
-        overview[2020]['for_sale_count'][key] = round(sum(for_sale_count_timeline[key][12:]) / 12, 2)
-        overview[2020]['sold_count'][key] = round(sum(sold_count_timeline[key][12:]) /12, 2)
+        all_data = []
 
-    writeData(for_sale_median_timeline, f'for_sale_timeline_{property_type}')
-    writeData(sold_median_timeline, f'sold_timeline_{property_type}')
-    writeData(for_sale_count_timeline, f'for_sale_count_timeline_{property_type}')
-    writeData(sold_count_timeline, f'sold_count_timeline_{property_type}')
-    writeData(overview, f'overview_{property_type}')
+        # filter raw data
+        for root, _, files in os.walk(dirs[ptype]):
+            for file in files:
+                if file.endswith('.json') and file.startswith('data'):
+                    file_path = root + '/' + file
+                    with open(file_path) as f:
+                        raw_data = json.load(f)
+                        all_data.append(prepare_data(raw_data, cols, new_cols)) 
+        
+        # initiate dictionaries
+        for_sale_median_timeline = {}
+        sold_median_timeline = {}
+        for_sale_count_timeline = {}
+        sold_count_timeline = {}
+        overview = {
+            2019: {
+                'for_sale_median': {},
+                'sold_median': {},
+                'for_sale_count': {},
+                'sold_count': {},
+            },
+            2020: {
+                'for_sale_median': {},
+                'sold_median': {},
+                'for_sale_count': {},
+                'sold_count': {},
+            },
+            'allYears': {
+                'for_sale_median': {},
+                'sold_median': {},
+                'for_sale_count': {},
+                'sold_count': {},
+            }
+        }
+        # sacount = 0
+        for suburb in all_data[0]:
+            # sacount += 1
+            for_sale_median_timeline[suburb['sa3code']] = [0]*24
+            sold_median_timeline[suburb['sa3code']] = [0]*24
+            for_sale_count_timeline[suburb['sa3code']] = [0]*24
+            sold_count_timeline[suburb['sa3code']] = [0]*24
+        # print(sacount)
+        # print(for_sale_median_timeline)
+
+        # construct median price timeline and count timeline
+        for month_data in all_data:
+            for suburb_data in month_data:
+                year = suburb_data['year']
+                month = suburb_data['month']
+                index = (year - 2019) * 12 + (month - 1)
+                # if suburb_data['for_sale_median_price'] == 0 or suburb_data['sold_median_price'] == 0 or suburb_data['for_sale_count'] == 0 or suburb_data['sold_count'] == 0:
+                #     print('bad data')
+                for_sale_median_timeline[suburb_data['sa3code']][index] = suburb_data['for_sale_median_price']
+                sold_median_timeline[suburb_data['sa3code']][index] = suburb_data['sold_median_price']
+                for_sale_count_timeline[suburb_data['sa3code']][index] = suburb_data['for_sale_count']
+                sold_count_timeline[suburb_data['sa3code']][index] = suburb_data['sold_count']
+        # print(for_sale_count_timeline)
+
+        # construct overview 
+        for key in for_sale_median_timeline:
+            overview['allYears']['for_sale_median'][key] = round(sum(for_sale_median_timeline[key]) / 24, 2)
+            overview['allYears']['sold_median'][key] = round(sum(sold_median_timeline[key]) / 24, 2)
+            overview['allYears']['for_sale_count'][key] = round(sum(for_sale_count_timeline[key]) / 24, 2)
+            overview['allYears']['sold_count'][key] = round(sum(sold_count_timeline[key]) / 24, 2)
+            overview[2019]['for_sale_median'][key] = round(sum(for_sale_median_timeline[key][:12]) / 12, 2)
+            overview[2019]['sold_median'][key] = round(sum(sold_median_timeline[key][:12]) / 12, 2)
+            overview[2019]['for_sale_count'][key] = round(sum(for_sale_count_timeline[key][:12]) / 12, 2)
+            overview[2019]['sold_count'][key] = round(sum(sold_count_timeline[key][:12]) /12, 2)
+            overview[2020]['for_sale_median'][key] = round(sum(for_sale_median_timeline[key][12:]) / 12, 2)
+            overview[2020]['sold_median'][key] = round(sum(sold_median_timeline[key][12:]) / 12, 2)
+            overview[2020]['for_sale_count'][key] = round(sum(for_sale_count_timeline[key][12:]) / 12, 2)
+            overview[2020]['sold_count'][key] = round(sum(sold_count_timeline[key][12:]) /12, 2)
+        # writeData(for_sale_median_timeline, f'for_sale_timeline_{property_type}')
+        # writeData(sold_median_timeline, f'sold_timeline_{property_type}')
+        # writeData(for_sale_count_timeline, f'for_sale_count_timeline_{property_type}')
+        # writeData(sold_count_timeline, f'sold_count_timeline_{property_type}')
+        # writeData(overview, f'overview_{property_type}')
+
+        # calculate the coloring stops value for map styling, data are divided into 5 equal frequency bins
+        indexes = [7, 15, 23, 31, 39]
+        years  = ['allYears', 2019, 2020]
+        categories = ['for_sale_median', 'sold_median', 'for_sale_count', 'sold_count']
+        for y in years:
+            for c in categories:
+                values = [v for v in overview[y][c].values()]
+                values.sort()
+                stops = [values[i] for i in indexes]
+                coloring_stops[ptype][y][c] = stops
+        
+        #export real estate market overview info to geojson
+        # for feat in polygons['features']:
+        #     suburb = feat['properties']['sa3_code16']
+        #     feat['properties'][f'{ptype}_allyears_for_sale_median'] = overview['allYears']['for_sale_median'][int(suburb)]
+        #     feat['properties'][f'{ptype}_allyears_sold_median'] = overview['allYears']['sold_median'][int(suburb)]
+        #     feat['properties'][f'{ptype}_allyears_for_sale_count'] = overview['allYears']['for_sale_count'][int(suburb)]
+        #     feat['properties'][f'{ptype}_allyears_sold_count'] = overview['allYears']['sold_count'][int(suburb)]
+        #     feat['properties'][f'{ptype}_2019_for_sale_median'] = overview[2019]['for_sale_median'][int(suburb)]
+        #     feat['properties'][f'{ptype}_2019_sold_median'] = overview[2019]['sold_median'][int(suburb)]
+        #     feat['properties'][f'{ptype}_2019_for_sale_count'] = overview[2019]['for_sale_count'][int(suburb)]
+        #     feat['properties'][f'{ptype}_2019_sold_count'] = overview[2019]['sold_count'][int(suburb)]
+        #     feat['properties'][f'{ptype}_2020_for_sale_median'] = overview[2020]['for_sale_median'][int(suburb)]
+        #     feat['properties'][f'{ptype}_2020_sold_median'] = overview[2020]['sold_median'][int(suburb)]
+        #     feat['properties'][f'{ptype}_2020_for_sale_count'] = overview[2020]['for_sale_count'][int(suburb)]
+        #     feat['properties'][f'{ptype}_2020_sold_count'] = overview[2020]['sold_count'][int(suburb)]
+    
+
+    # print(polygons['features'][0]['properties'])
+    # with open('mel_polygons_realestate.geojson', 'w') as f:
+        # json.dump(polygons, f)
+    writeData(coloring_stops, f'coloring_stops')
 
 
 
@@ -120,8 +202,6 @@ def prepare_data(raw_data, cols, new_cols, year=None):
 def main():
     dir_dict = {
         'aurin-geo': '../../../AURIN_data/Geometry/mel/ed02f7e0-8037-42e5-a3da-34f1795fd8c5.shp',
-        'aurin-property-house' : '../../../AURIN_data/property/house',
-        'aurin-property-unit' : '../../../AURIN_data/property/unit',
         'aurin-population': '../../../AURIN_data/population',
         'aurin-homeless': 'vAURIN_data/homeless'
     }
@@ -212,8 +292,7 @@ def main():
     # exportGeoData(dir_dict['aurin-geo'], 'mel')
 
     # export property data
-    # exportPropertyData('house', col_dict['aurin-property'], new_cols['aurin-property'], dir_dict['aurin-property-house'])
-    # exportPropertyData('unit', col_dict['aurin-property'], new_cols['aurin-property'], dir_dict['aurin-property-unit'])
+    exportPropertyData(col_dict['aurin-property'], new_cols['aurin-property'])
 
     # # upload population data
     # uploadData(db_names[2], col_dict[db_names[2]], new_cols[db_names[2]], dir_dict[db_names[2]])

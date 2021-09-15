@@ -2,41 +2,33 @@ import ReactMapGL, { NavigationControl, Source, Layer } from "react-map-gl";
 import { useState } from "react";
 import theme from "../Navigation/Theme/theme";
 import ControlPanel from "./ControlPanel/ControlPanel";
-import geojson2 from "../../data/ProcessedData/mel_polygons0";
+import overviewData from "../../data/ProcessedData/mel_polygons_realestate";
+import coloring_stops from "../../data/ProcessedData/coloring_stops";
 
 const navControlStyle = {
     left: 10,
     top: 10,
 };
 
-const layerStyle1 = {
-    id: "suburbs_polygon",
-    type: "fill",
-    paint: {
-        "fill-color": theme.color.accent,
-        "fill-opacity": 0.6,
-        "fill-outline-color": theme.color.background.secondary,
-    },
-    filter: [
-        "any",
-        ["==", "sa3_code16", "20601"],
-        ["==", "sa3_code16", "20901"],
-    ],
-};
+const stops = coloring_stops["house"]["allYears"]["sold_count"];
 
-const layerStyle2 = {
-    id: "suburbs_polygon_2",
+const layerStyle = {
+    id: "house_allyears_sold_count",
     type: "fill",
     paint: {
-        "fill-color": theme.color.primary,
-        "fill-opacity": 0.6,
+        "fill-color": {
+            property: "house_allyears_sold_count",
+            stops: [
+                [stops[0], "#3288bd"],
+                [stops[1], "#66c2a5"],
+                [stops[2], "#abdda4"],
+                [stops[3], "#e6f598"],
+                [stops[4], "#ffffbf"],
+            ],
+        },
         "fill-outline-color": theme.color.background.secondary,
+        "fill-opacity": 0.8,
     },
-    filter: [
-        "any",
-        ["==", "sa3_code16", "20803"],
-        ["==", "sa3_code16", "21303"],
-    ],
 };
 
 function Map() {
@@ -52,7 +44,7 @@ function Map() {
     });
 
     const handleOnClick = (e) => {
-        console.log(e.features[0].properties["sa3_name16"]);
+        console.log(e.features[0].properties["house_allyears_sold_count"]);
         const {
             features,
             srcEvent: { offsetX, offsetY },
@@ -76,9 +68,10 @@ function Map() {
                 onViewportChange={(nextViewport) => setviewPort(nextViewport)}
                 onClick={handleOnClick}
             >
-                <Source type="geojson" data={geojson2}>
-                    <Layer {...layerStyle1} />
-                    <Layer {...layerStyle2} />
+                <Source type="geojson" data={overviewData}>
+                    {/* <Layer {...layerStyle1} /> */}
+                    {/* <Layer {...layerStyle2} /> */}
+                    <Layer {...layerStyle} />
                 </Source>
                 <NavigationControl style={navControlStyle} />
                 <ControlPanel />
