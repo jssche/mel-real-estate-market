@@ -1,14 +1,14 @@
-import Layout from "./components/Navigation/Layout/Layout";
+import Layout from "./components/UI/Layout/Layout";
 import Map from "./components/Map/Map";
 
-function App() {
-  return (
-    <>
-      <Layout>
-        <Map/>
-      </Layout>
-    </>
-  );
-}
+const App = () => {
+    return (
+        <>
+            <Layout>
+                <Map />
+            </Layout>
+        </>
+    );
+};
 
 export default App;

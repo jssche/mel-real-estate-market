@@ -7,7 +7,7 @@ const StyledLayout = styled.div`
 `;
 
 const MapWrapper = styled.div`
-    width: 100%;
+    width: 70vw;
     min-height: 100%;
 `;
 

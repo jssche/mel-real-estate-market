@@ -13,8 +13,6 @@ const theme = {
             primary: "#07234E",
         },
     },
-    padding: {},
-    margin: {},
     height: {
         navBarDesktop: "8vh",
         mapHeight: "92vh",
