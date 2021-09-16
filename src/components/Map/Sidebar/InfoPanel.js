@@ -137,11 +137,13 @@ const CaroselItem = (props) => {
         },
         animation: {},
         plugins: {
-            legend: {},
+            legend: {
+                position: "bottom",
+            },
             title: {
                 display: true,
                 text: props.item.title,
-                position: "bottom",
+                position: "top",
             },
             tooltip: {
                 displayColors: false,

@@ -10,6 +10,8 @@ import overviewData from "../../data/ProcessedData/mel_polygons_realestate";
 import coloring_stops from "../../data/ProcessedData/coloring_stops";
 import Sidebar from "./Sidebar/Sidebar";
 import styled from "styled-components";
+import MapLegend from "./MapLegend";
+import { currencyConverter } from "../Utils";
 
 const getCursor = ({ isHovering, isDragging }) => {
     return isDragging ? "grabbing" : isHovering ? "pointer" : "default";
@@ -50,11 +52,11 @@ const Map = () => {
                 "fill-color": {
                     property: styleId,
                     stops: [
-                        [stops[0], theme.color.stops[20]],
-                        [stops[1], theme.color.stops[40]],
-                        [stops[2], theme.color.stops[60]],
-                        [stops[3], theme.color.stops[80]],
-                        [stops[4], theme.color.stops[100]],
+                        [stops[0], theme.color.stops[0]],
+                        [stops[1], theme.color.stops[1]],
+                        [stops[2], theme.color.stops[2]],
+                        [stops[3], theme.color.stops[3]],
+                        [stops[4], theme.color.stops[4]],
                     ],
                 },
                 "fill-outline-color": theme.color.background.primary,
@@ -125,7 +127,10 @@ const Map = () => {
                                 {dataType === "median"
                                     ? "Median Price"
                                     : "Transaction Counts"}
-                                : {popupInfo.data}
+                                :{" "}
+                                {dataType === "median"
+                                    ? currencyConverter(popupInfo.data)
+                                    : popupInfo.data}
                             </div>
                         </PopupInfo>
                     </Popup>
@@ -150,6 +155,13 @@ const Map = () => {
                     salesType={salesType}
                     dataType={dataType}
                     panelInfo={panelInfo}
+                />
+                <MapLegend
+                    year={year}
+                    propertyType={propertyType}
+                    salesType={salesType}
+                    dataType={dataType}
+                    stops={stops}
                 />
             </ReactMapGL>
         </>

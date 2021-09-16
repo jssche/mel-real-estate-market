@@ -16,59 +16,6 @@ const StyledSidebar = styled.div`
     align-items: flex-start;
 `;
 
-const genSummary = (year, propertyType, salesType, dataType) => {
-    let yearPrint;
-    let propertyTypePrint;
-    let dataTypePrint;
-    let salesTypePrint;
-
-    switch (year) {
-        case "2019":
-            yearPrint = "2019";
-            break;
-        case "2020":
-            yearPrint = "2020";
-            break;
-        default:
-            yearPrint = "2019 and 2020";
-    }
-
-    switch (propertyType) {
-        case "unit":
-            propertyTypePrint = "units";
-            break;
-        default:
-            propertyTypePrint = "houses";
-    }
-
-    switch (salesType) {
-        case "for_sale":
-            salesTypePrint = "for sale";
-            break;
-        default:
-            salesTypePrint = "sold";
-    }
-
-    switch (dataType) {
-        case "count":
-            dataTypePrint = "counts";
-            break;
-        default:
-            dataTypePrint = "median price";
-    }
-    return (
-        "Map is showing the " +
-        dataTypePrint +
-        " of the " +
-        salesTypePrint +
-        " " +
-        propertyTypePrint +
-        " in " +
-        yearPrint +
-        " in the Great Melbourne Area. "
-    );
-};
-
 const Sidebar = ({
     setYear,
     setPropertyType,
@@ -80,11 +27,8 @@ const Sidebar = ({
     dataType,
     panelInfo,
 }) => {
-    const summary = genSummary(year, propertyType, salesType, dataType);
-
     return (
         <StyledSidebar>
-            <p style={{ padding: "1em" }}>{summary}</p>
             <ControlPanel
                 setYear={setYear}
                 setPropertyType={setPropertyType}

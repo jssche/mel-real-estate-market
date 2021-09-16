@@ -8,16 +8,17 @@ const theme = {
         background: {
             primary: "#94D3C0",
             secondary: "#FEFFF6",
+            secondary_alfa: "#FEFFF699",
         },
         text: {
             primary: "#07234E",
         },
         stops: {
-            20: "#ffffbf",
-            40: "#fee08b",
-            60: "#fdae61",
-            80: "#f46d43",
-            100: "#d53e4f",
+            0: "#ffffbf",
+            1: "#fee08b",
+            2: "#fdae61",
+            3: "#f46d43",
+            4: "#d53e4f",
         },
     },
     height: {
