@@ -9,6 +9,7 @@ import theme from "../Theme/theme";
 import overviewData from "../../data/ProcessedData/mel_polygons_realestate";
 import coloring_stops from "../../data/ProcessedData/coloring_stops";
 import Sidebar from "./Sidebar/Sidebar";
+import styled from "styled-components";
 
 const navControlStyle = {
     left: 10,
@@ -19,69 +20,72 @@ const getCursor = ({ isHovering, isDragging }) => {
     return isDragging ? "grabbing" : isHovering ? "pointer" : "default";
 };
 
-const formLayerStyle = (year, propertyType, salesType, dataType) => {
-    const dataName = salesType + "_" + dataType;
-    const stops = coloring_stops[propertyType][year][dataName];
+const PopupInfo = styled.div`
+    display: flex;
+    flex-direction: column;
+    padding: 0.5em;
+    width: auto;
+    height: auto;
+    font-size: 1em;
 
-    const styleId = propertyType + "_" + year + "_" + dataName;
-    const layerStyle = {
-        id: "mapStyle",
-        type: "fill",
-        paint: {
-            "fill-color": {
-                property: styleId,
-                stops: [
-                    [stops[0], "#3288bd"],
-                    [stops[1], "#66c2a5"],
-                    [stops[2], "#abdda4"],
-                    [stops[3], "#e6f598"],
-                    [stops[4], "#ffffbf"],
-                ],
-            },
-            "fill-outline-color": theme.color.background.secondary,
-            "fill-opacity": 0.6,
-        },
-    };
-    return layerStyle;
-};
+    div + div {
+        margin-top: 0.5em;
+    }
+`;
 
 const Map = () => {
     const [panelInfo, setPanelInfo] = useState(null);
     const [popupInfo, setPopupInfo] = useState(null);
-    const [year, setYear] = useState(null);
-    const [propertyType, setPropertyType] = useState(null);
-    const [salesType, setSalesType] = useState(null);
-    const [dataType, setDataType] = useState(null);
-    const [emptyMap, setEmptyMap] = useState(true);
-    const [renderLayer, setRenderLayer] = useState(false);
-    // const [mapLayerStyle, setMapLayerStyle] = useState(null);
+    const [year, setYear] = useState("allyears");
+    const [propertyType, setPropertyType] = useState("house");
+    const [salesType, setSalesType] = useState("sold");
+    const [dataType, setDataType] = useState("median");
 
     const [viewPort, setviewPort] = useState({
         latitude: -37.930825,
         longitude: 144.9631,
         zoom: 8,
-        width: "100%",
-        height: theme.height.mapHeight,
-        mapStyle: "mapbox://styles/mapbox/light-v10",
     });
 
-    const emptyMapLayerStyle = {
-        id: "mapStyle",
-        type: "fill",
-        paint: {
-            "fill-color": "transparent",
-            "fill-outline-color": theme.color.primary,
-            "fill-opacity": 1,
-        },
+    const formLayerStyle = (styleId, stops) => {
+        const mapLayerStyle = {
+            id: "mapStyle",
+            type: "fill",
+            paint: {
+                "fill-color": {
+                    property: styleId,
+                    stops: [
+                        [stops[0], theme.color.stops[20]],
+                        [stops[1], theme.color.stops[40]],
+                        [stops[2], theme.color.stops[60]],
+                        [stops[3], theme.color.stops[80]],
+                        [stops[4], theme.color.stops[100]],
+                    ],
+                },
+                "fill-outline-color": theme.color.background.primary,
+                "fill-opacity": 0.6,
+            },
+        };
+        return mapLayerStyle;
     };
+
+    const dataName = salesType + "_" + dataType;
+    const stops = coloring_stops[propertyType][year][dataName];
+    const styleId = propertyType + "_" + year + "_" + dataName;
+    let mapLayerStyle = formLayerStyle(styleId, stops);
 
     const handleOnClick = (e) => {
         if (e.features[0]) {
             const { features } = e;
             const selectedSuburb = features[0].properties["sa3_name16"];
             const selectedSuburbCode = features[0].properties["sa3_code16"];
-            console.log(selectedSuburb);
-            setPopupInfo({});
+            const data = Math.round(features[0].properties[styleId], 0);
+            setPopupInfo({
+                name: selectedSuburb,
+                data: data,
+                longitude: e.lngLat[0],
+                latitude: e.lngLat[1],
+            });
             setPanelInfo({
                 suburbCode: selectedSuburbCode,
                 suburbName: selectedSuburb,
@@ -89,40 +93,61 @@ const Map = () => {
         }
     };
 
-    let mapLayerStyle = null;
-
-    if (renderLayer) {
-        if (emptyMap) {
-            setEmptyMap(false);
-        }
-        // setRenderLayer(false);
-        mapLayerStyle = formLayerStyle(year, propertyType, salesType, dataType);
-    }
-
     return (
         <>
             <ReactMapGL
                 {...viewPort}
-                mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
+                width="100%"
+                height={theme.height.mapHeight}
+                mapStyle="mapbox://styles/jssche/cktm9ilu59vx819qtpgfs5t3z"
+                mapboxApiAccessToken={
+                    "pk.eyJ1IjoianNzY2hlIiwiYSI6ImNrdGljdDgycDExMGMyd3FucXhzaGs1OWEifQ.wXhDDu4cd7dgddsBs7c6cA"
+                }
+                // mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
                 onViewportChange={(nextViewport) => setviewPort(nextViewport)}
                 onClick={handleOnClick}
                 getCursor={getCursor}
                 interactiveLayerIds={["mapStyle"]}
             >
                 <Source type="geojson" data={overviewData}>
-                    {emptyMap ? (
-                        <Layer {...emptyMapLayerStyle} />
-                    ) : renderLayer ? (
-                        <Layer {...mapLayerStyle} />
-                    ) : null}
+                    <Layer
+                        {...mapLayerStyle}
+                        beforeId={"settlement-subdivision-label"}
+                    />
                 </Source>
-                <NavigationControl style={navControlStyle} />
+                {popupInfo && (
+                    <Popup
+                        tipSize={3}
+                        anchor="bottom"
+                        longitude={popupInfo.longitude}
+                        latitude={popupInfo.latitude}
+                        closeOnClick={true}
+                        onClose={setPopupInfo}
+                    >
+                        <PopupInfo>
+                            <div>Area: {popupInfo.name}</div>
+                            <div>
+                                {dataType === "median"
+                                    ? "Median Price"
+                                    : "Transaction Counts"}
+                                : {popupInfo.data}
+                            </div>
+                        </PopupInfo>
+                    </Popup>
+                )}
+                <div style={{ width: "2em" }}>
+                    <NavigationControl style={navControlStyle} />
+                </div>
                 <Sidebar
                     setYear={setYear}
                     setPropertyType={setPropertyType}
                     setSalesType={setSalesType}
                     setDataType={setDataType}
-                    setRenderLayer={setRenderLayer}
+                    year={year}
+                    propertyType={propertyType}
+                    salesType={salesType}
+                    dataType={dataType}
+                    panelInfo={panelInfo}
                 />
             </ReactMapGL>
         </>

@@ -19,13 +19,13 @@ const PanelItem = styled.div`
 const ItemHeader = styled.div`
     color: ${theme.color.text.primary};
     font-size: 0.8em;
-    padding-bottom: 1.5em;
+    padding-bottom: 1em;
 `;
 
 const ItemOptions = styled.div`
     display: flex;
     flex-direction: row;
-    padding-bottom: 2em;
+    padding-bottom: 1.5em;
 `;
 
 const PanelButton = styled.button`
@@ -35,7 +35,10 @@ const PanelButton = styled.button`
     padding-bottom: 0.4em;
     border-style: none;
     border-bottom-style: solid;
-    border-bottom-color: #dbdbdb;
+    border-bottom-color: ${(props) =>
+        props.selected === props.value
+            ? theme.color.background.primary
+            : "#dbdbdb"};
     background-color: transparent;
     font-size: 0.9em;
 
@@ -50,17 +53,28 @@ const ControlPanel = ({
     setPropertyType,
     setSalesType,
     setDataType,
-    setRenderLayer,
+    year,
+    propertyType,
+    salesType,
+    dataType,
 }) => {
     return (
         <StyledPanel>
             <PanelItem>
                 <ItemHeader>Property Type</ItemHeader>
                 <ItemOptions>
-                    <PanelButton onClick={(e) => setPropertyType("house")}>
+                    <PanelButton
+                        onClick={(e) => setPropertyType("house")}
+                        value="house"
+                        selected={propertyType}
+                    >
                         House
                     </PanelButton>
-                    <PanelButton onClick={(e) => setPropertyType("unit")}>
+                    <PanelButton
+                        onClick={(e) => setPropertyType("unit")}
+                        value="unit"
+                        selected={propertyType}
+                    >
                         Unit
                     </PanelButton>
                 </ItemOptions>
@@ -69,13 +83,25 @@ const ControlPanel = ({
             <PanelItem>
                 <ItemHeader>Year</ItemHeader>
                 <ItemOptions>
-                    <PanelButton onClick={(e) => setYear("2019")}>
+                    <PanelButton
+                        onClick={(e) => setYear("2019")}
+                        value="2019"
+                        selected={year}
+                    >
                         2019
                     </PanelButton>
-                    <PanelButton onClick={(e) => setYear("2020")}>
+                    <PanelButton
+                        onClick={(e) => setYear("2020")}
+                        value="2020"
+                        selected={year}
+                    >
                         2020
                     </PanelButton>
-                    <PanelButton onClick={(e) => setYear("allyears")}>
+                    <PanelButton
+                        onClick={(e) => setYear("allyears")}
+                        value="allyears"
+                        selected={year}
+                    >
                         All
                     </PanelButton>
                 </ItemOptions>
@@ -84,10 +110,18 @@ const ControlPanel = ({
             <PanelItem>
                 <ItemHeader>Sales State</ItemHeader>
                 <ItemOptions>
-                    <PanelButton onClick={(e) => setSalesType("for_sale")}>
+                    <PanelButton
+                        onClick={(e) => setSalesType("for_sale")}
+                        value="for_sale"
+                        selected={salesType}
+                    >
                         For Sale
                     </PanelButton>
-                    <PanelButton onClick={(e) => setSalesType("sold")}>
+                    <PanelButton
+                        onClick={(e) => setSalesType("sold")}
+                        value="sold"
+                        selected={salesType}
+                    >
                         Sold
                     </PanelButton>
                 </ItemOptions>
@@ -96,19 +130,19 @@ const ControlPanel = ({
             <PanelItem>
                 <ItemHeader>Data</ItemHeader>
                 <ItemOptions>
-                    <PanelButton onClick={(e) => setDataType("median")}>
+                    <PanelButton
+                        onClick={(e) => setDataType("median")}
+                        value="median"
+                        selected={dataType}
+                    >
                         Median Price
                     </PanelButton>
-                    <PanelButton onClick={(e) => setDataType("count")}>
+                    <PanelButton
+                        onClick={(e) => setDataType("count")}
+                        value="count"
+                        selected={dataType}
+                    >
                         Transaction Count
-                    </PanelButton>
-                </ItemOptions>
-            </PanelItem>
-
-            <PanelItem>
-                <ItemOptions>
-                    <PanelButton onClick={(e) => setRenderLayer(true)}>
-                        Render
                     </PanelButton>
                 </ItemOptions>
             </PanelItem>

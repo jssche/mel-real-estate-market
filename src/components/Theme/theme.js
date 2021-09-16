@@ -12,6 +12,13 @@ const theme = {
         text: {
             primary: "#07234E",
         },
+        stops: {
+            20: "#ffffbf",
+            40: "#fee08b",
+            60: "#fdae61",
+            80: "#f46d43",
+            100: "#d53e4f",
+        },
     },
     height: {
         navBarDesktop: "8vh",
