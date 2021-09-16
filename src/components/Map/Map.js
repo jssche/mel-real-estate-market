@@ -11,11 +11,6 @@ import coloring_stops from "../../data/ProcessedData/coloring_stops";
 import Sidebar from "./Sidebar/Sidebar";
 import styled from "styled-components";
 
-const navControlStyle = {
-    left: 10,
-    top: 10,
-};
-
 const getCursor = ({ isHovering, isDragging }) => {
     return isDragging ? "grabbing" : isHovering ? "pointer" : "default";
 };
@@ -135,8 +130,15 @@ const Map = () => {
                         </PopupInfo>
                     </Popup>
                 )}
-                <div style={{ width: "2em" }}>
-                    <NavigationControl style={navControlStyle} />
+                <div
+                    style={{
+                        width: "2em",
+                        position: "absolute",
+                        left: 10,
+                        top: 10,
+                    }}
+                >
+                    <NavigationControl showCompass={false} />
                 </div>
                 <Sidebar
                     setYear={setYear}
