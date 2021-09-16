@@ -142,7 +142,7 @@ const ControlPanel = ({
                         value="count"
                         selected={dataType}
                     >
-                        Transaction Count
+                        Sales Count
                     </PanelButton>
                 </ItemOptions>
             </PanelItem>

@@ -39,7 +39,7 @@ const Map = () => {
     const [viewPort, setviewPort] = useState({
         latitude: -37.930825,
         longitude: 144.9631,
-        zoom: 8,
+        zoom: 8.5,
     });
 
     const formLayerStyle = (styleId, stops) => {

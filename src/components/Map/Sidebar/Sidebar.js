@@ -51,7 +51,7 @@ const genSummary = (year, propertyType, salesType, dataType) => {
 
     switch (dataType) {
         case "count":
-            dataTypePrint = "transaction counts";
+            dataTypePrint = "counts";
             break;
         default:
             dataTypePrint = "median price";
