@@ -43,6 +43,9 @@ const CarouselWrapper = styled.div`
     }
 `;
 
+// a function that prepares the data used by the line charts
+// Input: property type(house, unit), data type(price, count), suburb code(code of the selected SA3 region)
+// Output: dictionary, data to be fed to line charts
 const genChartData = (propertyType, dataType, suburbCode) => {
     const months = [...Array(12).keys()];
     const years = ["2019", "2020"];
@@ -94,6 +97,9 @@ const genChartData = (propertyType, dataType, suburbCode) => {
     return data;
 };
 
+// a function prepares data that are used to generate carosel items
+// Input: tabIndex(0, 1), suburbCode(code of the selected suburb), suburbName(name of the selected suburb)
+// Output: a list of dictionary, each dictionary stores the title and the data used to create line charts
 const genItems = (tabIndex, suburbCode, suburbName) => {
     let propertyType;
 
@@ -122,6 +128,9 @@ const genItems = (tabIndex, suburbCode, suburbName) => {
     return items;
 };
 
+//  a function that creates the CaroselItem components
+//  Input: the title and data for creating line charts
+//  Output: a react component that contains a line chart
 const CaroselItem = (props) => {
     const options = {
         maintainAspectRatio: false,
@@ -131,16 +140,8 @@ const CaroselItem = (props) => {
                 grid: {
                     display: false,
                 },
-                ticks: {},
-                title: {},
-            },
-            y: {
-                grid: {},
-                ticks: {},
-                title: {},
             },
         },
-        animation: {},
         plugins: {
             legend: {
                 position: "bottom",
@@ -171,6 +172,10 @@ const CaroselItem = (props) => {
     );
 };
 
+// when the interface is initially loaded, the InfoPanel contains a prompt to encourage users to select a region on the map
+// Once a region is selected, the InfoPanel contains:
+// a Help button component, a Tabs component for allowing users to select property type(house, unit),
+// and a Carousel component for allowing users to select data type(price, count)
 const InfoPanel = ({ panelInfo }) => {
     const [tabIndex, setTabIndex] = useState(0);
 
@@ -199,6 +204,7 @@ const InfoPanel = ({ panelInfo }) => {
                             }
                         />
                     </IconWrapper>
+
                     <Tabs
                         value={tabIndex}
                         onChange={handleChange}
@@ -212,10 +218,12 @@ const InfoPanel = ({ panelInfo }) => {
                         <Tab label="House" />
                         <Tab label="Unit" />
                     </Tabs>
+
                     <CarouselWrapper>
                         <Carousel
                             autoPlay={false}
                             animation={"slide"}
+                            navButtonsAlwaysVisible={true}
                             navButtonsProps={{
                                 style: { width: "0.5em", height: "0.5em" },
                             }}

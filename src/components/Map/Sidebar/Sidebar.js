@@ -16,6 +16,9 @@ const StyledSidebar = styled.div`
     align-items: flex-start;
 `;
 
+// the sidebar component contains a map control panel and an information panel
+// the map control panel controls how the choropleth map layer is rendered
+// information panel displays SA3 region history data
 const Sidebar = ({
     setYear,
     setPropertyType,

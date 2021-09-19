@@ -1,6 +1,7 @@
 import theme from "../Theme/theme";
 import styled from "styled-components";
 
+//  A UI component for styling the help button
 const IconWrapper = styled.div`
     color: ${theme.color.text.primary};
     display: inline-block;

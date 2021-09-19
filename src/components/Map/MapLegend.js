@@ -49,6 +49,9 @@ const LegendItemName = styled.div`
     font-size: 0.8em;
 `;
 
+// a function that generates a data summary
+//  Input: year(2019, 2020, all), property type(house, unit), salses type(for sale, sold), and data type(price, count)
+//  Output: string, a summary of the data that are being displayed in the map
 const genSummary = (year, propertyType, salesType, dataType) => {
     let yearPrint;
     let propertyTypePrint;
@@ -102,6 +105,9 @@ const genSummary = (year, propertyType, salesType, dataType) => {
     );
 };
 
+// a function that generates legend entries
+// Input: index, current stop, previous stop, data type(price, count)
+// Output: react component, an entry in the legend
 const LegendItem = ({ index, stop, prevStop, dataType }) => {
     let name, prevName;
     if (dataType === "median") {
@@ -120,6 +126,7 @@ const LegendItem = ({ index, stop, prevStop, dataType }) => {
     );
 };
 
+//  athe map Lengend component contains data summary, data srouce, and legend
 const MapLegend = ({ year, propertyType, salesType, dataType, stops }) => {
     const summary = genSummary(year, propertyType, salesType, dataType);
 

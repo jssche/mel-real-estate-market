@@ -50,6 +50,7 @@ const PanelButton = styled.button`
     }
 `;
 
+// the ControlPanel component contains a helper button and the buttons that users can select to control the data that are rendered on the map
 const ControlPanel = ({
     setYear,
     setPropertyType,
@@ -63,6 +64,7 @@ const ControlPanel = ({
 }) => {
     return (
         <StyledPanel>
+            {/* a help button */}
             <IconWrapper>
                 <IoHelpCircleOutline
                     title={
@@ -70,6 +72,8 @@ const ControlPanel = ({
                     }
                 />
             </IconWrapper>
+
+            {/* Map controllers */}
             <PanelItem>
                 <ItemHeader>Property Type</ItemHeader>
                 <ItemOptions>

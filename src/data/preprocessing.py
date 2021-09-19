@@ -116,13 +116,12 @@ def exportPropertyData(cols, new_cols):
                 year = suburb_data['year']
                 month = suburb_data['month']
                 index = (year - 2019) * 12 + (month - 1)
-                # if suburb_data['for_sale_median_price'] == 0 or suburb_data['sold_median_price'] == 0 or suburb_data['for_sale_count'] == 0 or suburb_data['sold_count'] == 0:
-                #     print('bad data')
+                if suburb_data['for_sale_median_price'] == 0 or suburb_data['sold_median_price'] == 0 or suburb_data['for_sale_count'] == 0 or suburb_data['sold_count'] == 0:
+                    print('bad data')
                 for_sale_median_timeline[suburb_data['sa3code']][index] = suburb_data['for_sale_median_price']
                 sold_median_timeline[suburb_data['sa3code']][index] = suburb_data['sold_median_price']
                 for_sale_count_timeline[suburb_data['sa3code']][index] = round(suburb_data['for_sale_count'] / spatialInfo['area'][str(suburb_data['sa3code'])], 2)
                 sold_count_timeline[suburb_data['sa3code']][index] = round(suburb_data['sold_count'] / spatialInfo['area'][str(suburb_data['sa3code'])], 2)
-        # print(for_sale_count_timeline)
 
 
         # construct overview 
@@ -139,11 +138,11 @@ def exportPropertyData(cols, new_cols):
             overview[2020]['sold_median'][key] = round(sum(sold_median_timeline[key][12:]) / 12, 2)
             overview[2020]['for_sale_count'][key] = round(sum(for_sale_count_timeline[key][12:]) / 12, 2)
             overview[2020]['sold_count'][key] = round(sum(sold_count_timeline[key][12:]) /12, 2)
-        # writeData(for_sale_median_timeline, f'for_sale_timeline_{ptype}')
-        # writeData(sold_median_timeline, f'sold_timeline_{ptype}')
-        # writeData(for_sale_count_timeline, f'for_sale_count_timeline_{ptype}_normed')
-        # writeData(sold_count_timeline, f'sold_count_timeline_{ptype}_normed')
-        # writeData(overview, f'overview_{ptype}')
+        writeData(for_sale_median_timeline, f'for_sale_timeline_{ptype}')
+        writeData(sold_median_timeline, f'sold_timeline_{ptype}')
+        writeData(for_sale_count_timeline, f'for_sale_count_timeline_{ptype}_normed')
+        writeData(sold_count_timeline, f'sold_count_timeline_{ptype}_normed')
+        writeData(overview, f'overview_{ptype}')
 
 
         # calculate the coloring stops value for map styling, data are divided into 5 equal frequency bins
@@ -175,10 +174,9 @@ def exportPropertyData(cols, new_cols):
             feat['properties'][f'{ptype}_2020_sold_count'] = overview[2020]['sold_count'][int(suburb)]
     
     # Write overview data to geojson files
-    # print(polygons['features'][0]['properties'])
-    # with open('./processedData/mel_polygons_realestate_normed.geojson', 'w') as f:
-    #     json.dump(polygons, f)
-    # writeData(coloring_stops, f'coloring_stops_normed')
+    with open('./processedData/mel_polygons_realestate_normed.geojson', 'w') as f:
+        json.dump(polygons, f)
+    writeData(coloring_stops, f'coloring_stops_normed')
 
 
 def prepare_data(raw_data, cols, new_cols, year=None):

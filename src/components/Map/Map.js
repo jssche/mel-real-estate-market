@@ -26,11 +26,14 @@ const PopupInfo = styled.div`
     }
 `;
 
+//  customize cursor behaviour
 const getCursor = ({ isHovering, isDragging }) => {
     return isDragging ? "grabbing" : isHovering ? "pointer" : "default";
 };
 
+//  the map component contains a MapGL component, a Sidebar component, and a MapLegend component.
 const Map = () => {
+    // initialize map states
     const [panelInfo, setPanelInfo] = useState(null);
     const [popupInfo, setPopupInfo] = useState(null);
     const [year, setYear] = useState("allyears");
@@ -38,12 +41,14 @@ const Map = () => {
     const [salesType, setSalesType] = useState("sold");
     const [dataType, setDataType] = useState("median");
 
+    // set initial map view
     const [viewPort, setviewPort] = useState({
         latitude: -37.8308,
         longitude: 144.9631,
         zoom: 8.5,
     });
 
+    //  style the polygon layer based on data
     const formLayerStyle = (styleId, stops) => {
         const mapLayerStyle = {
             id: "mapStyle",
@@ -66,11 +71,13 @@ const Map = () => {
         return mapLayerStyle;
     };
 
+    // generate choropleth map layer based on map states
     const dataName = salesType + "_" + dataType;
     const stops = coloring_stops[propertyType][year][dataName];
     const styleId = propertyType + "_" + year + "_" + dataName;
     let mapLayerStyle = formLayerStyle(styleId, stops);
 
+    //  a function that handles click events
     const handleOnClick = (e) => {
         if (e.features[0]) {
             const { features } = e;
@@ -108,12 +115,15 @@ const Map = () => {
                 getCursor={getCursor}
                 interactiveLayerIds={["mapStyle"]}
             >
+                {/* render choropleth map layer */}
                 <Source type="geojson" data={overviewData}>
                     <Layer
                         {...mapLayerStyle}
                         beforeId={"settlement-subdivision-label"}
                     />
                 </Source>
+
+                {/* render popup box */}
                 {popupInfo && (
                     <Popup
                         tipSize={5}
@@ -137,17 +147,21 @@ const Map = () => {
                         </PopupInfo>
                     </Popup>
                 )}
+
+                {/* render navigation control */}
                 <div
                     style={{
                         width: "2em",
                         position: "absolute",
-                        left: 10,
+                        left: "1em",
                         top: 10,
                     }}
                 >
                     <NavigationControl showCompass={false} />
                 </div>
             </ReactMapGL>
+
+            {/* render sidebar */}
             <Sidebar
                 setYear={setYear}
                 setPropertyType={setPropertyType}
@@ -160,6 +174,8 @@ const Map = () => {
                 panelInfo={panelInfo}
                 setPopupInfo={setPopupInfo}
             />
+
+            {/* render map legend */}
             <MapLegend
                 year={year}
                 propertyType={propertyType}

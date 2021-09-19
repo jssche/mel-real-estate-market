@@ -1,6 +1,7 @@
 import geodata from "../data/ProcessedData/mel_polygons_realestate";
 const turf = require("@turf/turf");
 
+// the function calculate the centroids and the size of the polygons
 const findSpatialInfo = () => {
     let spatialInfo = {
         centroid: {},

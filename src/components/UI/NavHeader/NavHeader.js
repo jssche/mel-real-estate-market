@@ -9,7 +9,7 @@ const NavHeaderDiv = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 1vh 2em;
+    padding: 1vh 1em;
     box-sizing: border-box;
     overflow: hidden;
 `;
