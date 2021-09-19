@@ -13,10 +13,6 @@ import styled from "styled-components";
 import MapLegend from "./MapLegend";
 import { currencyConverter } from "../Utils";
 
-const getCursor = ({ isHovering, isDragging }) => {
-    return isDragging ? "grabbing" : isHovering ? "pointer" : "default";
-};
-
 const PopupInfo = styled.div`
     display: flex;
     flex-direction: column;
@@ -30,6 +26,10 @@ const PopupInfo = styled.div`
     }
 `;
 
+const getCursor = ({ isHovering, isDragging }) => {
+    return isDragging ? "grabbing" : isHovering ? "pointer" : "default";
+};
+
 const Map = () => {
     const [panelInfo, setPanelInfo] = useState(null);
     const [popupInfo, setPopupInfo] = useState(null);
@@ -39,7 +39,7 @@ const Map = () => {
     const [dataType, setDataType] = useState("median");
 
     const [viewPort, setviewPort] = useState({
-        latitude: -37.930825,
+        latitude: -37.8308,
         longitude: 144.9631,
         zoom: 8.5,
     });
@@ -94,7 +94,9 @@ const Map = () => {
         <>
             <ReactMapGL
                 {...viewPort}
-                width="100%"
+                width="70vw"
+                maxZoom={12}
+                minZoom={8.2}
                 height={theme.height.mapHeight}
                 mapStyle="mapbox://styles/jssche/cktm9ilu59vx819qtpgfs5t3z"
                 mapboxApiAccessToken={
@@ -114,7 +116,7 @@ const Map = () => {
                 </Source>
                 {popupInfo && (
                     <Popup
-                        tipSize={3}
+                        tipSize={5}
                         anchor="bottom"
                         longitude={popupInfo.longitude}
                         latitude={popupInfo.latitude}
@@ -145,25 +147,25 @@ const Map = () => {
                 >
                     <NavigationControl showCompass={false} />
                 </div>
-                <Sidebar
-                    setYear={setYear}
-                    setPropertyType={setPropertyType}
-                    setSalesType={setSalesType}
-                    setDataType={setDataType}
-                    year={year}
-                    propertyType={propertyType}
-                    salesType={salesType}
-                    dataType={dataType}
-                    panelInfo={panelInfo}
-                />
-                <MapLegend
-                    year={year}
-                    propertyType={propertyType}
-                    salesType={salesType}
-                    dataType={dataType}
-                    stops={stops}
-                />
             </ReactMapGL>
+            <Sidebar
+                setYear={setYear}
+                setPropertyType={setPropertyType}
+                setSalesType={setSalesType}
+                setDataType={setDataType}
+                year={year}
+                propertyType={propertyType}
+                salesType={salesType}
+                dataType={dataType}
+                panelInfo={panelInfo}
+            />
+            <MapLegend
+                year={year}
+                propertyType={propertyType}
+                salesType={salesType}
+                dataType={dataType}
+                stops={stops}
+            />
         </>
     );
 };

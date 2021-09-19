@@ -4,12 +4,12 @@ import ControlPanel from "./ControlPanel";
 import InfoPanel from "./InfoPanel";
 
 const StyledSidebar = styled.div`
-    background: ${theme.color.background.secondary};
+    background: ${theme.color.background.sideBar};
     position: fixed;
     top: ${theme.height.navBarDesktop};
     right: 0;
-    width: 30vw;
-    height: 92vh;
+    width: ${theme.width.sideBarWidth};
+    height: ${theme.height.mapHeight};
     z-index: 100;
     display: flex;
     flex-direction: column;

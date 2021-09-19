@@ -1,17 +1,16 @@
+// A dictionary that holds the common styling specifications that are shared across different components.
 const theme = {
     color: {
         primary: "#5ABE93",
-        secondary: "#59AEA6",
-        tertiary: "#B2D9B7",
-        accent: "#FA885E",
-        accentHover: "#E87E57",
+        secondary: "#FA885E",
         background: {
-            primary: "#94D3C0",
-            secondary: "#FEFFF6",
-            secondary_alfa: "#FEFFF699",
+            primary: "#387B5E",
+            sideBar: "#FFFFFF",
+            legend: "#FFFFFF99",
         },
         text: {
             primary: "#07234E",
+            secondary: "#BDBDBD",
         },
         stops: {
             0: "#ffffbf",
@@ -24,6 +23,10 @@ const theme = {
     height: {
         navBarDesktop: "8vh",
         mapHeight: "92vh",
+    },
+    width: {
+        mapWidth: "70vw",
+        sideBarWidth: "30vw",
     },
 };
 

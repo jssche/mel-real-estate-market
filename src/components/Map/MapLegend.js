@@ -3,7 +3,7 @@ import theme from "../Theme/theme";
 import { currencyConverter } from "../Utils";
 
 const MapLegendWrapper = styled.div`
-    background: ${theme.color.background.secondary_alfa};
+    background: ${theme.color.background.legend};
     position: fixed;
     bottom: 2em;
     width: 20vw;
@@ -20,6 +20,14 @@ const MapLegendWrapper = styled.div`
 const LegendSummary = styled.p`
     margin-top: 0;
     margin-bottom: 1em;
+
+    a:link {
+        color: ${theme.color.text.primary};
+    }
+
+    a:visited {
+        color: ${theme.color.text.primary};
+    }
 `;
 
 const Legend = styled.div``;
@@ -118,6 +126,12 @@ const MapLegend = ({ year, propertyType, salesType, dataType, stops }) => {
     return (
         <MapLegendWrapper>
             <LegendSummary>{summary}</LegendSummary>
+            <LegendSummary>
+                Data Source:
+                <a href="https://www.apm.com.au/" target="_blank">
+                    Australian Property Monitors
+                </a>
+            </LegendSummary>
             <Legend>
                 {stops.map((stop, i) => (
                     <LegendItem

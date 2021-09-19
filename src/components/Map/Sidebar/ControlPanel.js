@@ -1,11 +1,15 @@
 import theme from "../../Theme/theme";
 import styled from "styled-components";
+import { IoHelpCircleOutline } from "react-icons/io5";
+import IconWrapper from "../../UI/Help";
 
 const StyledPanel = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
     padding: 1em;
+    height: 36vh;
+    overflow: auto;
 `;
 
 const PanelItem = styled.div`
@@ -16,13 +20,13 @@ const PanelItem = styled.div`
 const ItemHeader = styled.div`
     color: ${theme.color.text.primary};
     font-size: 0.8em;
-    padding-bottom: 1em;
+    padding-bottom: 1.5vh;
 `;
 
 const ItemOptions = styled.div`
     display: flex;
     flex-direction: row;
-    padding-bottom: 1.5em;
+    padding-bottom: 2vh;
 `;
 
 const PanelButton = styled.button`
@@ -35,9 +39,10 @@ const PanelButton = styled.button`
     border-bottom-color: ${(props) =>
         props.selected === props.value
             ? theme.color.background.primary
-            : "#dbdbdb"};
+            : theme.color.text.secondary};
     background-color: transparent;
     font-size: 0.9em;
+    color: ${theme.color.text.primary};
 
     &:hover {
         border-bottom-color: ${theme.color.background.primary};
@@ -57,6 +62,13 @@ const ControlPanel = ({
 }) => {
     return (
         <StyledPanel>
+            <IconWrapper>
+                <IoHelpCircleOutline
+                    title={
+                        "Click on the buttons to change the data you want to compare across SA3 regions."
+                    }
+                />
+            </IconWrapper>
             <PanelItem>
                 <ItemHeader>Property Type</ItemHeader>
                 <ItemOptions>

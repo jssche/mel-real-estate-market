@@ -6,6 +6,8 @@ import { useState } from "react";
 import Carousel from "react-material-ui-carousel";
 import { Paper } from "@material-ui/core";
 import { Line } from "react-chartjs-2";
+import IconWrapper from "../../UI/Help";
+import { IoHelpCircleOutline } from "react-icons/io5";
 import for_sale_count_house from "../../../data/ProcessedData/for_sale_count_timeline_house";
 import for_sale_count_unit from "../../../data/ProcessedData/for_sale_count_timeline_unit";
 import for_sale_median_house from "../../../data/ProcessedData/for_sale_timeline_house";
@@ -31,9 +33,9 @@ const CarouselWrapper = styled.div`
 
     .MuiPaper-root {
         padding: 0.5em;
-        padding-top: 2em;
-        min-height: 30vh;
-        background-color: ${theme.color.background.secondary};
+        padding-top: 1em;
+        height: 40vh;
+        background-color: ${theme.color.background.sideBar};
     }
 
     .MuiPaper-elevation1 {
@@ -83,8 +85,8 @@ const genChartData = (propertyType, dataType, suburbCode) => {
             {
                 label: "Sold",
                 data: sold_history,
-                borderColor: theme.color.accent,
-                backgroundColor: theme.color.accent,
+                borderColor: theme.color.secondary,
+                backgroundColor: theme.color.secondary,
             },
         ],
     };
@@ -182,10 +184,18 @@ const InfoPanel = ({ panelInfo }) => {
         <StyledPanel>
             {!panelInfo ? (
                 <div>
-                    Please select an area on the map to view the market history.
+                    Please select a region on the map to view the market
+                    history.
                 </div>
             ) : (
                 <>
+                    <IconWrapper>
+                        <IoHelpCircleOutline
+                            title={
+                                "Click on the map to view the market history of the selected region."
+                            }
+                        />
+                    </IconWrapper>
                     <Tabs
                         value={tabIndex}
                         onChange={handleChange}
@@ -206,8 +216,6 @@ const InfoPanel = ({ panelInfo }) => {
                             navButtonsProps={{
                                 style: { width: "0.5em", height: "0.5em" },
                             }}
-                            // next={(active, _) => console.log(`at ${active}`)}
-                            // prev={(active, _) => console.log(`at ${active}`)}
                         >
                             {items.map((item, i) => (
                                 <CaroselItem key={i} item={item} />

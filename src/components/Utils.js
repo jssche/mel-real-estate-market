@@ -1,3 +1,6 @@
+// Convers numbers to currency format.
+// Input: a float or int number
+// Output: a string in the format of $xxx,xxx
 export const currencyConverter = (num) => {
     const conv =
         "$" +
