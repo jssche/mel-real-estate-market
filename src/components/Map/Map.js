@@ -98,7 +98,7 @@ const Map = () => {
                 maxZoom={12}
                 minZoom={8.2}
                 height={theme.height.mapHeight}
-                mapStyle="mapbox://styles/jssche/cktm9ilu59vx819qtpgfs5t3z"
+                mapStyle="mapbox://styles/jssche/cktqycdgr02z01apomuvd83c2"
                 mapboxApiAccessToken={
                     "pk.eyJ1IjoianNzY2hlIiwiYSI6ImNrdGljdDgycDExMGMyd3FucXhzaGs1OWEifQ.wXhDDu4cd7dgddsBs7c6cA"
                 }

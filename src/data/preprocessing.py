@@ -196,31 +196,6 @@ def prepare_data(raw_data, cols, new_cols, year=None):
         output.append(data)
     return output
 
-
-# def findSpatialInfo(area, centroid):
-#     print('test')
-#     with open('./ProcessedData/mel_polygons_realestate.geojson', 'r') as f:
-#         file = json.load(f)
-
-#     spatialInfo = {
-#         'centroid': {},
-#         'area': {},
-#     }
-
-#     for feature in file['features']:
-#         code = feature['properties']['sa3_code16']
-#         polygon_feature = FeatureCollection([Feature(geometry=feature['geometry'])])
-#         print(feature['geometry']['coordinates'][0])
-#         polygon = Polygon(feature['geometry']['coordinates'][0])
-#         print(type(polygon))
-#         # centroid = centroid(polygon)
-#         area = round(area(polygon_feature) / 1000000, 0)
-#         spatialInfo["centroid"][code] = centroid
-#         spatialInfo["area"][code] = area   
-    
-#     print(spatialInfo)
-
-
 def main():
     col_dict = {
         'aurin-property' : ['datemonth', 
