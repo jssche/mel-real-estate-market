@@ -6,8 +6,8 @@ import ReactMapGL, {
 } from "react-map-gl";
 import { useState } from "react";
 import theme from "../Theme/theme";
-import overviewData from "../../data/ProcessedData/mel_polygons_realestate";
-import coloring_stops from "../../data/ProcessedData/coloring_stops";
+import overviewData from "../../data/ProcessedData/mel_polygons_realestate_normed";
+import coloring_stops from "../../data/ProcessedData/coloring_stops_normed";
 import Sidebar from "./Sidebar/Sidebar";
 import styled from "styled-components";
 import MapLegend from "./MapLegend";
@@ -76,7 +76,7 @@ const Map = () => {
             const { features } = e;
             const selectedSuburb = features[0].properties["sa3_name16"];
             const selectedSuburbCode = features[0].properties["sa3_code16"];
-            const data = Math.round(features[0].properties[styleId], 0);
+            const data = features[0].properties[styleId];
             setPopupInfo({
                 name: selectedSuburb,
                 data: data,
@@ -128,8 +128,8 @@ const Map = () => {
                             <div>
                                 {dataType === "median"
                                     ? "Median Price"
-                                    : "Transaction Counts"}
-                                :{" "}
+                                    : "Sales Counts (per squared kilometer) "}
+                                :
                                 {dataType === "median"
                                     ? currencyConverter(popupInfo.data)
                                     : popupInfo.data}
@@ -158,6 +158,7 @@ const Map = () => {
                 salesType={salesType}
                 dataType={dataType}
                 panelInfo={panelInfo}
+                setPopupInfo={setPopupInfo}
             />
             <MapLegend
                 year={year}

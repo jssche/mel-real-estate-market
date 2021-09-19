@@ -26,6 +26,7 @@ const Sidebar = ({
     salesType,
     dataType,
     panelInfo,
+    setPopupInfo,
 }) => {
     return (
         <StyledSidebar>
@@ -38,6 +39,7 @@ const Sidebar = ({
                 propertyType={propertyType}
                 salesType={salesType}
                 dataType={dataType}
+                setPopupInfo={setPopupInfo}
             />
             <InfoPanel panelInfo={panelInfo}></InfoPanel>
         </StyledSidebar>

@@ -84,10 +84,10 @@ const genSummary = (year, propertyType, salesType, dataType) => {
 
     switch (dataType) {
         case "count":
-            dataTypePrint = "counts";
+            dataTypePrint = "average per-squared-kilometer counts";
             break;
         default:
-            dataTypePrint = "median price";
+            dataTypePrint = "average median price";
     }
     return (
         "The " +

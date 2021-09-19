@@ -8,12 +8,12 @@ import { Paper } from "@material-ui/core";
 import { Line } from "react-chartjs-2";
 import IconWrapper from "../../UI/Help";
 import { IoHelpCircleOutline } from "react-icons/io5";
-import for_sale_count_house from "../../../data/ProcessedData/for_sale_count_timeline_house";
-import for_sale_count_unit from "../../../data/ProcessedData/for_sale_count_timeline_unit";
+import for_sale_count_house_normed from "../../../data/ProcessedData/for_sale_count_timeline_house_normed";
+import for_sale_count_unit_normed from "../../../data/ProcessedData/for_sale_count_timeline_unit_normed";
 import for_sale_median_house from "../../../data/ProcessedData/for_sale_timeline_house";
 import for_sale_median_unit from "../../../data/ProcessedData/for_sale_timeline_unit";
-import sold_count_house from "../../../data/ProcessedData/sold_count_timeline_house";
-import sold_count_unit from "../../../data/ProcessedData/sold_count_timeline_unit";
+import sold_count_house_normed from "../../../data/ProcessedData/sold_count_timeline_house_normed";
+import sold_count_unit_normed from "../../../data/ProcessedData/sold_count_timeline_unit_normed";
 import sold_median_house from "../../../data/ProcessedData/sold_timeline_house";
 import sold_median_unit from "../../../data/ProcessedData/sold_timeline_unit";
 
@@ -60,16 +60,16 @@ const genChartData = (propertyType, dataType, suburbCode) => {
             for_sale_history = for_sale_median_house[suburbCode];
             sold_history = sold_median_house[suburbCode];
         } else if (dataType === "count") {
-            for_sale_history = for_sale_count_house[suburbCode];
-            sold_history = sold_count_house[suburbCode];
+            for_sale_history = for_sale_count_house_normed[suburbCode];
+            sold_history = sold_count_house_normed[suburbCode];
         }
     } else if (propertyType === "unit") {
         if (dataType === "median") {
             for_sale_history = for_sale_median_unit[suburbCode];
             sold_history = sold_median_unit[suburbCode];
         } else if (dataType === "count") {
-            for_sale_history = for_sale_count_unit[suburbCode];
-            sold_history = sold_count_unit[suburbCode];
+            for_sale_history = for_sale_count_unit_normed[suburbCode];
+            sold_history = sold_count_unit_normed[suburbCode];
         }
     }
 
@@ -108,7 +108,10 @@ const genItems = (tabIndex, suburbCode, suburbName) => {
             ),
         },
         {
-            title: propertyType + " Sales Count in " + suburbName,
+            title:
+                propertyType +
+                " Sales Count (per squared kilometers) in " +
+                suburbName,
             chartData: genChartData(
                 propertyType.toLowerCase(),
                 "count",
@@ -192,7 +195,7 @@ const InfoPanel = ({ panelInfo }) => {
                     <IconWrapper>
                         <IoHelpCircleOutline
                             title={
-                                "Click on the map to view the market history of the selected region."
+                                "Select a region on the map to view the market history of the region."
                             }
                         />
                     </IconWrapper>

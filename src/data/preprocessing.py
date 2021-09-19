@@ -3,6 +3,10 @@
 import os
 import json
 import geopandas as gpd
+from turfpy.measurement import area as area
+from turfpy.measurement import centroid as centroid
+from geojson import Feature, FeatureCollection, Polygon
+
 
 def writeData(data, filename):
     with open('./ProcessedData/'+filename, 'w') as output:
@@ -12,8 +16,11 @@ def writeData(data, filename):
 def exportPropertyData(cols, new_cols):
     property_types = ['house', 'unit']
     dirs = {'house' : '../../../AURIN_data/property/house', 'unit' : '../../../AURIN_data/property/unit'}
-    # with open('./ProcessedData/mel_polygons.geojson', 'r') as f:
-    #     polygons = json.load(f)
+    with open('./ProcessedData/mel_polygons.geojson', 'r') as f:
+        polygons = json.load(f)
+    with open('./ProcessedData/spatialData.json', 'r') as f:
+        spatialInfo = json.load(f)
+
 
     coloring_stops = {
         'house' : {
@@ -113,8 +120,8 @@ def exportPropertyData(cols, new_cols):
                 #     print('bad data')
                 for_sale_median_timeline[suburb_data['sa3code']][index] = suburb_data['for_sale_median_price']
                 sold_median_timeline[suburb_data['sa3code']][index] = suburb_data['sold_median_price']
-                for_sale_count_timeline[suburb_data['sa3code']][index] = suburb_data['for_sale_count']
-                sold_count_timeline[suburb_data['sa3code']][index] = suburb_data['sold_count']
+                for_sale_count_timeline[suburb_data['sa3code']][index] = round(suburb_data['for_sale_count'] / spatialInfo['area'][str(suburb_data['sa3code'])], 2)
+                sold_count_timeline[suburb_data['sa3code']][index] = round(suburb_data['sold_count'] / spatialInfo['area'][str(suburb_data['sa3code'])], 2)
         # print(for_sale_count_timeline)
 
 
@@ -132,11 +139,11 @@ def exportPropertyData(cols, new_cols):
             overview[2020]['sold_median'][key] = round(sum(sold_median_timeline[key][12:]) / 12, 2)
             overview[2020]['for_sale_count'][key] = round(sum(for_sale_count_timeline[key][12:]) / 12, 2)
             overview[2020]['sold_count'][key] = round(sum(sold_count_timeline[key][12:]) /12, 2)
-        # writeData(for_sale_median_timeline, f'for_sale_timeline_{property_type}')
-        # writeData(sold_median_timeline, f'sold_timeline_{property_type}')
-        # writeData(for_sale_count_timeline, f'for_sale_count_timeline_{property_type}')
-        # writeData(sold_count_timeline, f'sold_count_timeline_{property_type}')
-        # writeData(overview, f'overview_{property_type}')
+        # writeData(for_sale_median_timeline, f'for_sale_timeline_{ptype}')
+        # writeData(sold_median_timeline, f'sold_timeline_{ptype}')
+        # writeData(for_sale_count_timeline, f'for_sale_count_timeline_{ptype}_normed')
+        # writeData(sold_count_timeline, f'sold_count_timeline_{ptype}_normed')
+        # writeData(overview, f'overview_{ptype}')
 
 
         # calculate the coloring stops value for map styling, data are divided into 5 equal frequency bins
@@ -152,26 +159,26 @@ def exportPropertyData(cols, new_cols):
         
 
         #export real estate market overview info to geojson
-        # for feat in polygons['features']:
-        #     suburb = feat['properties']['sa3_code16']
-        #     feat['properties'][f'{ptype}_allyears_for_sale_median'] = overview['allYears']['for_sale_median'][int(suburb)]
-        #     feat['properties'][f'{ptype}_allyears_sold_median'] = overview['allYears']['sold_median'][int(suburb)]
-        #     feat['properties'][f'{ptype}_allyears_for_sale_count'] = overview['allYears']['for_sale_count'][int(suburb)]
-        #     feat['properties'][f'{ptype}_allyears_sold_count'] = overview['allYears']['sold_count'][int(suburb)]
-        #     feat['properties'][f'{ptype}_2019_for_sale_median'] = overview[2019]['for_sale_median'][int(suburb)]
-        #     feat['properties'][f'{ptype}_2019_sold_median'] = overview[2019]['sold_median'][int(suburb)]
-        #     feat['properties'][f'{ptype}_2019_for_sale_count'] = overview[2019]['for_sale_count'][int(suburb)]
-        #     feat['properties'][f'{ptype}_2019_sold_count'] = overview[2019]['sold_count'][int(suburb)]
-        #     feat['properties'][f'{ptype}_2020_for_sale_median'] = overview[2020]['for_sale_median'][int(suburb)]
-        #     feat['properties'][f'{ptype}_2020_sold_median'] = overview[2020]['sold_median'][int(suburb)]
-        #     feat['properties'][f'{ptype}_2020_for_sale_count'] = overview[2020]['for_sale_count'][int(suburb)]
-        #     feat['properties'][f'{ptype}_2020_sold_count'] = overview[2020]['sold_count'][int(suburb)]
+        for feat in polygons['features']:
+            suburb = feat['properties']['sa3_code16']
+            feat['properties'][f'{ptype}_allyears_for_sale_median'] = overview['allYears']['for_sale_median'][int(suburb)]
+            feat['properties'][f'{ptype}_allyears_sold_median'] = overview['allYears']['sold_median'][int(suburb)]
+            feat['properties'][f'{ptype}_allyears_for_sale_count'] = overview['allYears']['for_sale_count'][int(suburb)]
+            feat['properties'][f'{ptype}_allyears_sold_count'] = overview['allYears']['sold_count'][int(suburb)]
+            feat['properties'][f'{ptype}_2019_for_sale_median'] = overview[2019]['for_sale_median'][int(suburb)]
+            feat['properties'][f'{ptype}_2019_sold_median'] = overview[2019]['sold_median'][int(suburb)]
+            feat['properties'][f'{ptype}_2019_for_sale_count'] = overview[2019]['for_sale_count'][int(suburb)]
+            feat['properties'][f'{ptype}_2019_sold_count'] = overview[2019]['sold_count'][int(suburb)]
+            feat['properties'][f'{ptype}_2020_for_sale_median'] = overview[2020]['for_sale_median'][int(suburb)]
+            feat['properties'][f'{ptype}_2020_sold_median'] = overview[2020]['sold_median'][int(suburb)]
+            feat['properties'][f'{ptype}_2020_for_sale_count'] = overview[2020]['for_sale_count'][int(suburb)]
+            feat['properties'][f'{ptype}_2020_sold_count'] = overview[2020]['sold_count'][int(suburb)]
     
     # Write overview data to geojson files
     # print(polygons['features'][0]['properties'])
-    # with open('mel_polygons_realestate.geojson', 'w') as f:
-        # json.dump(polygons, f)
-    writeData(coloring_stops, f'coloring_stops')
+    # with open('./processedData/mel_polygons_realestate_normed.geojson', 'w') as f:
+    #     json.dump(polygons, f)
+    # writeData(coloring_stops, f'coloring_stops_normed')
 
 
 def prepare_data(raw_data, cols, new_cols, year=None):
@@ -188,6 +195,30 @@ def prepare_data(raw_data, cols, new_cols, year=None):
                 data[new_cols[i]] = 0
         output.append(data)
     return output
+
+
+# def findSpatialInfo(area, centroid):
+#     print('test')
+#     with open('./ProcessedData/mel_polygons_realestate.geojson', 'r') as f:
+#         file = json.load(f)
+
+#     spatialInfo = {
+#         'centroid': {},
+#         'area': {},
+#     }
+
+#     for feature in file['features']:
+#         code = feature['properties']['sa3_code16']
+#         polygon_feature = FeatureCollection([Feature(geometry=feature['geometry'])])
+#         print(feature['geometry']['coordinates'][0])
+#         polygon = Polygon(feature['geometry']['coordinates'][0])
+#         print(type(polygon))
+#         # centroid = centroid(polygon)
+#         area = round(area(polygon_feature) / 1000000, 0)
+#         spatialInfo["centroid"][code] = centroid
+#         spatialInfo["area"][code] = area   
+    
+#     print(spatialInfo)
 
 
 def main():
@@ -216,7 +247,7 @@ def main():
     }
 
     # export property data
-    exportPropertyData(col_dict['aurin-property'], new_cols['aurin-property'])
+    exportPropertyData(col_dict['aurin-property'], new_cols['aurin-property'])     
 
 
     

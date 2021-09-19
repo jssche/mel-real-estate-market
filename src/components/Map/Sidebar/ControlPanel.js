@@ -59,6 +59,7 @@ const ControlPanel = ({
     propertyType,
     salesType,
     dataType,
+    setPopupInfo,
 }) => {
     return (
         <StyledPanel>
@@ -73,14 +74,20 @@ const ControlPanel = ({
                 <ItemHeader>Property Type</ItemHeader>
                 <ItemOptions>
                     <PanelButton
-                        onClick={(e) => setPropertyType("house")}
+                        onClick={(e) => {
+                            setPropertyType("house");
+                            setPopupInfo(null);
+                        }}
                         value="house"
                         selected={propertyType}
                     >
                         House
                     </PanelButton>
                     <PanelButton
-                        onClick={(e) => setPropertyType("unit")}
+                        onClick={(e) => {
+                            setPropertyType("unit");
+                            setPopupInfo(null);
+                        }}
                         value="unit"
                         selected={propertyType}
                     >
@@ -93,21 +100,30 @@ const ControlPanel = ({
                 <ItemHeader>Year</ItemHeader>
                 <ItemOptions>
                     <PanelButton
-                        onClick={(e) => setYear("2019")}
+                        onClick={(e) => {
+                            setYear("2019");
+                            setPopupInfo(null);
+                        }}
                         value="2019"
                         selected={year}
                     >
                         2019
                     </PanelButton>
                     <PanelButton
-                        onClick={(e) => setYear("2020")}
+                        onClick={(e) => {
+                            setYear("2020");
+                            setPopupInfo(null);
+                        }}
                         value="2020"
                         selected={year}
                     >
                         2020
                     </PanelButton>
                     <PanelButton
-                        onClick={(e) => setYear("allyears")}
+                        onClick={(e) => {
+                            setYear("allyears");
+                            setPopupInfo(null);
+                        }}
                         value="allyears"
                         selected={year}
                     >
@@ -120,14 +136,20 @@ const ControlPanel = ({
                 <ItemHeader>Sales State</ItemHeader>
                 <ItemOptions>
                     <PanelButton
-                        onClick={(e) => setSalesType("for_sale")}
+                        onClick={(e) => {
+                            setSalesType("for_sale");
+                            setPopupInfo(null);
+                        }}
                         value="for_sale"
                         selected={salesType}
                     >
                         For Sale
                     </PanelButton>
                     <PanelButton
-                        onClick={(e) => setSalesType("sold")}
+                        onClick={(e) => {
+                            setSalesType("sold");
+                            setPopupInfo(null);
+                        }}
                         value="sold"
                         selected={salesType}
                     >
@@ -140,14 +162,20 @@ const ControlPanel = ({
                 <ItemHeader>Data</ItemHeader>
                 <ItemOptions>
                     <PanelButton
-                        onClick={(e) => setDataType("median")}
+                        onClick={(e) => {
+                            setDataType("median");
+                            setPopupInfo(null);
+                        }}
                         value="median"
                         selected={dataType}
                     >
                         Median Price
                     </PanelButton>
                     <PanelButton
-                        onClick={(e) => setDataType("count")}
+                        onClick={(e) => {
+                            setDataType("count");
+                            setPopupInfo(null);
+                        }}
                         value="count"
                         selected={dataType}
                     >
